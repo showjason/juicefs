@@ -17,7 +17,7 @@ jobs:
       - name: Set Variable
         id: vars
         run: |
-          echo ::set-output name=META_URL::redis://mymaster,172.27.0.1,172.27.0.2,172.27.0.3:26379/3
+          echo ::set-output name=META_URL::redis://mymaster,172.27.0.1,172.27.0.2,172.27.0.3:26379/4
           echo ::set-output name=MINIO_URL::http://172.27.0.2:9005/juicefs-fio-benchmark
           echo ::set-output name=MOUNT_POINT::/tmp/juicefs-fio-benchmark
 
@@ -27,7 +27,9 @@ jobs:
       - name: Juicefs Format
         run: |
           UUID=$(juicefs status ${{ steps.vars.outputs.META_URL }} | grep UUID | cut -d '"' -f 4)
+          echo "UUID:", $UUID
           if [ -n "$UUID" ];then
+            
             sudo juicefs destroy ${{ steps.vars.outputs.META_URL }} $UUID
           fi
           sudo juicefs format --storage minio --bucket  ${{ steps.vars.outputs.MINIO_URL }} --access-key minioadmin --secret-key ${{ secrets.MINIO_SECRET_KEY }}  ${{ steps.vars.outputs.META_URL }} fio-benchmark
