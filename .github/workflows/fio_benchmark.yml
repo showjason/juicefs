@@ -5,11 +5,6 @@ on:
     - cron:  '0 0 * * *'
   workflow_dispatch:
 
-env:
-  META_URL: redis://mymaster,172.27.0.1,172.27.0.2,172.27.0.3:26379/3
-  MINIO_URL: http://172.27.0.2:9005/juicefs-fio-benchmark
-  MOUNT_POINT: /tmp/juicefs-fio-benchmark
-
 jobs:
   fio-benchmark:
     runs-on: [self-hosted, daily-build]
@@ -24,6 +19,13 @@ jobs:
 
       - name: Juicefs Format
         run: |
+          export META_URL=redis://mymaster,172.27.0.1,172.27.0.2,172.27.0.3:26379/3
+          echo "::set-env name=META_URL::$META_URL"
+          export MINIO_URL=http://172.27.0.2:9005/juicefs-fio-benchmark
+          echo "::set-env name=MINIO_URL::$MINIO_URL"
+          export MOUNT_POINT=/tmp/juicefs-fio-benchmark
+          echo "::set-env name=MOUNT_POINT::$MOUNT_POINT"
+
           UUID=$(./juicefs status $META_URL | grep UUID | cut -d '"' -f 4)
           if [ -n "$UUID" ];then
             sudo ./juicefs destroy $META_URL $UUID
