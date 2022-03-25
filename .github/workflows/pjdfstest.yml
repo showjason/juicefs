@@ -70,6 +70,7 @@ jobs:
         with:
           channel-id: "${{ secrets.SLACK_CHANNEL_ID_FOR_PR_CHECK_NOTIFY }}"
           slack-message: "@${{ github.actor}} CI Check ${{ job.status }} on ${{ github.event_name }}\n${{ github.event.pull_request.title || github.event.head_commit.message }} \nhttps://github.com/${{github.repository}}/actions/runs/${{github.run_id}}"
+        env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}  
 
       - name: Setup upterm session
