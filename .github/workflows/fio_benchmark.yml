@@ -21,8 +21,8 @@ jobs:
           echo ::set-output name=MINIO_URL::http://172.27.0.2:9005/juicefs-fio-benchmark
           echo ::set-output name=MOUNT_POINT::/tmp/juicefs-fio-benchmark
 
-#      - name: Build linux target
-#        run: make juicefs
+      - name: Build linux target
+        run: make juicefs
 
       - name: Juicefs Format
         run: |
@@ -49,12 +49,12 @@ jobs:
             sudo juicefs destroy ${{ steps.vars.outputs.META_URL }} $UUID
           fi
 
-      - name: Send Slack Notification
-        if: ${{ failure() }}
-        id: slack
-        uses: slackapi/slack-github-action@v1.18.0
-        with:
-          channel-id: "${{ secrets.SLACK_CHANNEL_ID_FOR_PR_CHECK_NOTIFY }}"
-          slack-message: "@${{ github.actor}} CI Check ${{ job.status }} on ${{ github.event_name }}\n${{ github.event.pull_request.title || github.event.head_commit.message }} \nhttps://github.com/${{github.repository}}/actions/runs/${{github.run_id}}"
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}  
+#      - name: Send Slack Notification
+#        if: ${{ failure() }}
+#        id: slack
+#        uses: slackapi/slack-github-action@v1.18.0
+#        with:
+#          channel-id: "${{ secrets.SLACK_CHANNEL_ID_FOR_PR_CHECK_NOTIFY }}"
+#          slack-message: "@${{ github.actor}} CI Check ${{ job.status }} on ${{ github.event_name }}\n${{ github.event.pull_request.title || github.event.head_commit.message }} \nhttps://github.com/${{github.repository}}/actions/runs/${{github.run_id}}"
+#        env:
+#          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}  
