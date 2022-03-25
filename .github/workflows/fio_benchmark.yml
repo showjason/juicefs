@@ -14,8 +14,8 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Build linux target
-        run: make juicefs
+#      - name: Build linux target
+#        run: make juicefs
 
       - name: Juicefs Format
         run: |
@@ -26,15 +26,15 @@ jobs:
           export MOUNT_POINT=/tmp/juicefs-fio-benchmark
           echo "::set-env name=MOUNT_POINT::$MOUNT_POINT"
 
-          UUID=$(./juicefs status $META_URL | grep UUID | cut -d '"' -f 4)
+          UUID=$(juicefs status $META_URL | grep UUID | cut -d '"' -f 4)
           if [ -n "$UUID" ];then
-            sudo ./juicefs destroy $META_URL $UUID
+            sudo juicefs destroy $META_URL $UUID
           fi
-          sudo ./juicefs format --storage minio --bucket  $MINIO_URL --access-key minioadmin --secret-key ${{ secrets.MINIO_SECRET_KEY }}  $META_URL fio-benchmark
+          sudo juicefs format --storage minio --bucket  $MINIO_URL --access-key minioadmin --secret-key ${{ secrets.MINIO_SECRET_KEY }}  $META_URL fio-benchmark
 
       - name: Juicefs Mount
         run: |
-          sudo ./juicefs mount -d $META_URL $MOUNT_POINT --no-usage-report &
+          sudo juicefs mount -d $META_URL $MOUNT_POINT --no-usage-report &
 
       - name: Fio Benchmark 
         run: |
