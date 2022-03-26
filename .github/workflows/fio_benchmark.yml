@@ -24,6 +24,7 @@ jobs:
       - name: Build linux target
         run: |
           export GOPATH=/usr/local/go
+          export HOME=/root
           make juicefs
 
       - name: Juicefs Format
