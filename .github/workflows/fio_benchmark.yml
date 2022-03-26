@@ -22,7 +22,9 @@ jobs:
           echo ::set-output name=MOUNT_POINT::/tmp/juicefs-fio-benchmark
 
       - name: Build linux target
-        run: make juicefs
+        run: |
+          echo $(env)
+          make juicefs
 
       - name: Juicefs Format
         run: |
