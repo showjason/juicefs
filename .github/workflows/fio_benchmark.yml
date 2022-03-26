@@ -23,7 +23,7 @@ jobs:
 
       - name: Build linux target
         run: |
-          echo $(env)
+          export GOPATH=/usr/local/go
           make juicefs
 
       - name: Juicefs Format
